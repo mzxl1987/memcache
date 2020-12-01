@@ -24,9 +24,9 @@ int bipbuf_unused(const bipbuf_t* me)
 {
     if (1 == me->b_inuse)
         /* distance between region B and region A */
-        return me->a_start - me->b_end;
+        return me->a_start - me->b_end;             /*  0-> XXXXXX [b-end] _____________ [a-start] XXXXXXXXX [a-end] ______    <- size  */
     else
-        return me->size - me->a_end;
+        return me->size - me->a_end;                /*  0-> [a-start] XXXXXXXXX [a-end] ______________    <- size  */
 }
 
 int bipbuf_size(const bipbuf_t* me)
@@ -36,7 +36,7 @@ int bipbuf_size(const bipbuf_t* me)
 
 int bipbuf_used(const bipbuf_t* me)
 {
-    return (me->a_end - me->a_start) + me->b_end;
+    return (me->a_end - me->a_start) + me->b_end;        /*  0-> XXXXXX [b-end] _____________ [a-start] XXXXXXXXX [a-end] ______    <- size  */
 }
 
 void bipbuf_init(bipbuf_t* me, const unsigned int size)
@@ -69,7 +69,7 @@ int bipbuf_is_empty(const bipbuf_t* me)
  * ie. is the distance from A to buffer's end less than B to A? */
 static void __check_for_switch_to_b(bipbuf_t* me)
 {
-    if (me->size - me->a_end < me->a_start - me->b_end)
+    if (me->size - me->a_end < me->a_start - me->b_end)          /*  0-> [b-end] ____________________________ [a-start] XXXXXXXXX [a-end] ______    <- size  */
         me->b_inuse = 1;
 }
 
